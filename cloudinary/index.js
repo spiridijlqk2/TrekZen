@@ -9,6 +9,13 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
     cloudinary,
-    folder: 'TrekZen',
-    allowedFormats: ['jpeg', 'png', 'jpg']
-})
+    params: {
+        folder: 'TrekZen',
+        allowedFormats: ['jpeg', 'png', 'jpg']
+    }
+});
+
+module.exports = {
+    cloudinary,
+    storage
+}

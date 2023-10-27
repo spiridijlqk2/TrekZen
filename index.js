@@ -16,6 +16,8 @@ const LocalStrategy = require('passport-local')
 const User = require('./models/user')
 const mongoSanitize = require('express-mongo-sanitize')
 const helmet = require('helmet')
+const MongoStore = require('connect-mongo')
+const dbUrl = 'mongodb://127.0.0.1:27017/trek-zen';
 
 const userRoutes = require('./routes/users')
 const campgroundRoutes = require('./routes/campgrounds')
@@ -37,7 +39,19 @@ app.use(mongoSanitize({
     replaceWith: '_'
 }))
 
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: 'thisisasecret'
+    }
+});
+store.on('error', function (e) {
+    console.log('Session Store Error', e)
+})
+
 const sessionConfig = {
+    store,
     name: 'session',
     secret: 'thisisasecret',
     resave: false,
@@ -131,7 +145,7 @@ app.use((err, req, res, next) => {
 })
 
 const start = async () => {
-    await mongoose.connect('mongodb://127.0.0.1:27017/trek-zen');
+    await mongoose.connect(dbUrl);
     app.listen(3000, () => {
         console.log('Serving on port 3000')
     })

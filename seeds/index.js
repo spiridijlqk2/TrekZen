@@ -1,10 +1,15 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
 const mongoose = require("mongoose");
 const Campground = require('../models/campground')
 const {places, descriptors} = require('./seedHelpers')
 const cities = require('./cities')
 const axios = require('axios')
+const prodUrl = process.env.DB_URL;
 
-mongoose.connect('mongodb://127.0.0.1:27017/trek-zen');
+mongoose.connect(prodUrl);
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'))

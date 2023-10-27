@@ -18,6 +18,7 @@ const mongoSanitize = require('express-mongo-sanitize')
 const helmet = require('helmet')
 const MongoStore = require('connect-mongo')
 const dbUrl = 'mongodb://127.0.0.1:27017/trek-zen';
+const prodUrl = process.env.DB_URL;
 
 const userRoutes = require('./routes/users')
 const campgroundRoutes = require('./routes/campgrounds')
@@ -145,7 +146,7 @@ app.use((err, req, res, next) => {
 })
 
 const start = async () => {
-    await mongoose.connect(dbUrl);
+    await mongoose.connect(prodUrl);
     app.listen(3000, () => {
         console.log('Serving on port 3000')
     })
